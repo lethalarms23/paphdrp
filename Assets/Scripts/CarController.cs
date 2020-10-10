@@ -22,6 +22,15 @@ public class CarController : MonoBehaviour
         frontPassengerW.steerAngle = m_steeringAngle;
     }
 
+    private void WheelTurn(){
+    	float x = wheel.eulerAngles.x;
+    	float y = wheel.eulerAngles.y;
+    	float z;
+    	z = -(m_steeringAngle * 2);
+    	Vector3 steer = new Vector3(x,y,z);
+    	wheel.eulerAngles = steer;
+    }
+
     private void HandBrake()
     {
         if (Input.GetKey(KeyCode.Space))
@@ -33,11 +42,13 @@ public class CarController : MonoBehaviour
         }
         else{
             HandBrakeCheck = false;
+            rearDriverW.brakeTorque = 0;
+            rearPassengerW.brakeTorque = 0;
         }
     }
 
     private void Brakes(){
-        if(gear.text != "N"){
+        /*if(gear.text != "N" && gear.text != "R"){
             if(m_verticalInput < 0){
                 rearDriverW.brakeTorque = brakeForce / 4;
                 rearPassengerW.brakeTorque = brakeForce / 4;
@@ -51,47 +62,71 @@ public class CarController : MonoBehaviour
                 frontPassengerW.brakeTorque = 0;
             }
         }
-    }
-
-    private void WheelTurn(){
-    	float x = wheel.eulerAngles.x;
-    	float y = wheel.eulerAngles.y;
-    	float z;
-    	z = -(m_steeringAngle * 2);
-    	Vector3 steer = new Vector3(x,y,z);
-    	wheel.eulerAngles = steer;
+        else if(gear.text == "R"){
+        	if(m_verticalInput > 0){
+                rearDriverW.brakeTorque = brakeForce / 4;
+                rearPassengerW.brakeTorque = brakeForce / 4;
+                frontDriverW.brakeTorque = brakeForce / 3;
+                frontPassengerW.brakeTorque = brakeForce / 3;
+            }
+            else if(HandBrakeCheck == false){
+                rearDriverW.brakeTorque = 0;
+                rearPassengerW.brakeTorque = 0;
+                frontDriverW.brakeTorque = 0;
+                frontPassengerW.brakeTorque = 0;
+            }
+        }*/
     }
 
     private void Accelerate()
     {
-        if(gear.text == "R"){
-            rearDriverW.motorTorque = -m_verticalInput * motorForce;
-            rearPassengerW.motorTorque = -m_verticalInput * motorForce;
-        }
-        else if(gear.text == "1"){
-            rearDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
-            rearPassengerW.motorTorque = m_verticalInput * (motorForce * 2.5f);
-        }
-        else if(gear.text == "2"){
-            rearDriverW.motorTorque = m_verticalInput * (motorForce * 2);
-            rearPassengerW.motorTorque = m_verticalInput * (motorForce * 2);
-        }
-        else if(gear.text == "3"){
-            rearDriverW.motorTorque = m_verticalInput * (motorForce * 1.5f);
-            rearPassengerW.motorTorque = m_verticalInput * (motorForce * 1.5f);
-        }
-        else if(gear.text == "4"){
-            rearDriverW.motorTorque = m_verticalInput * (motorForce * 1);
-            rearPassengerW.motorTorque = m_verticalInput * (motorForce * 1);
-        }
-        else if(gear.text == "5"){
-            rearDriverW.motorTorque = m_verticalInput * (motorForce * .5f);
-            rearPassengerW.motorTorque = m_verticalInput * (motorForce * .5f);
-        }
-        else if(gear.text == "6"){
-            rearDriverW.motorTorque = m_verticalInput * (motorForce);
-            rearPassengerW.motorTorque = m_verticalInput * (motorForce);
-        }
+    	//Manual Gearbox
+    	if(gearmode.text == "Man"){
+ 			if(gear.text == "R"){
+            	rearDriverW.motorTorque = -m_verticalInput * motorForce;
+            	rearPassengerW.motorTorque = -m_verticalInput * motorForce;
+        	}
+        	else if(gear.text == "1"){
+            	rearDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
+            	rearPassengerW.motorTorque = m_verticalInput * (motorForce * 2.5f);
+        	}
+        	else if(gear.text == "2"){
+            	rearDriverW.motorTorque = m_verticalInput * (motorForce * 2);
+            	rearPassengerW.motorTorque = m_verticalInput * (motorForce * 2);
+        	}
+        	else if(gear.text == "3"){
+            	rearDriverW.motorTorque = m_verticalInput * (motorForce * 1.5f);
+            	rearPassengerW.motorTorque = m_verticalInput * (motorForce * 1.5f);
+        	}
+        	else if(gear.text == "4"){
+           		rearDriverW.motorTorque = m_verticalInput * (motorForce * 1);
+            	rearPassengerW.motorTorque = m_verticalInput * (motorForce * 1);
+        	}
+        	else if(gear.text == "5"){
+            	rearDriverW.motorTorque = m_verticalInput * (motorForce * .5f);
+            	rearPassengerW.motorTorque = m_verticalInput * (motorForce * .5f);
+        	}
+        	else if(gear.text == "6"){
+            	rearDriverW.motorTorque = m_verticalInput * (motorForce);
+            	rearPassengerW.motorTorque = m_verticalInput * (motorForce);
+        	}
+    	}
+
+    	//Automatic Gearbox
+       	else if(gearmode.text == "Auto"){
+       		if(gear.text == "N"){
+       			if(m_verticalInput > 0){
+       				gear.text = "D";
+       				rearDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
+            		rearPassengerW.motorTorque = m_verticalInput * (motorForce * 2.5f);
+       			}
+       			else if(m_verticalInput < 0){
+       				gear.text = "R";
+       				rearDriverW.motorTorque = m_verticalInput * motorForce;
+            		rearPassengerW.motorTorque = m_verticalInput * motorForce;
+       			}
+       		}
+       	}
     }
 
     private void UpdateWheelPoses()
@@ -126,6 +161,8 @@ public class CarController : MonoBehaviour
 
     private void Start(){
         gear = gearText.GetComponent<Text>();
+        gearmode = geartype.GetComponent<Text>();
+        speedtext = speed.GetComponent<Text>();
     }
 
 
@@ -145,4 +182,10 @@ public class CarController : MonoBehaviour
 
     public GameObject gearText;
     private Text gear;
+
+    public GameObject geartype;
+    private Text gearmode;
+
+    public GameObject speed;
+    private Text speedtext;
 }
