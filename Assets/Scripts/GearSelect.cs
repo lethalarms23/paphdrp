@@ -19,9 +19,11 @@ public class GearSelect : MonoBehaviour
     	if(Input.GetKeyUp(KeyCode.N)){
     		if(gearmode.text == "Man"){
     			gearmode.text = "Auto";
+    			gear.text = "N";
     		}
     		else{
     			gearmode.text = "Man";
+    			gear.text = "N";
     		}
     	}
 
