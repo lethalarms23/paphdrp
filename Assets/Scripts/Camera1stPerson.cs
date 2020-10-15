@@ -36,4 +36,5 @@ public class Camera1stPerson : MonoBehaviour
     	GetInput();
     	Move();
     }
+
 }
