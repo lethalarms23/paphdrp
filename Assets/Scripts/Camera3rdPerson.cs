@@ -5,7 +5,7 @@ using UnityEngine;
 public class Camera3rdPerson : MonoBehaviour
 {
     public bool lockCursor;
-    public float mouseSensivity = 10;
+    public float mouseSensivity;
     public Transform target;
     public float distanceFromTarget = 2;
     public Vector2 pitchMinMax = new Vector2(-40, 85);
