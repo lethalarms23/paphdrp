@@ -6,12 +6,12 @@ using UnityEngine.UI;
 public class Speedometer : MonoBehaviour
 {
 
-	public Rigidbody rigid;
+	public Rigidbody rigidCar;
 	public Text speedText;
-	private double speed;
+	private float speed;
 
-	private void Speed(){
-		speed = (rigid.velocity.magnitude * 2.237 * Time.deltaTime) * 100;
+	private void SpeedCar(){
+		speed = (rigidCar.velocity.magnitude * 2.237f * Time.deltaTime) * 100;
 		if(speed < 1){
 			speedText.text = "0";
 		}
@@ -22,6 +22,8 @@ public class Speedometer : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Speed();
+        SpeedCar();
     }
+
+
 }

@@ -112,22 +112,9 @@ public class CarController : MonoBehaviour
         	rearDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
            	rearPassengerW.motorTorque = m_verticalInput * (motorForce * 2.5f);
         }
-
-    //Automatic Gearbox
-    if(gearmode.text == "Auto"){
-       	if(gear.text == "N"){
-       		if(m_verticalInput > 0){
-       			gear.text = "D";
-       			rearDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
-            	rearPassengerW.motorTorque = m_verticalInput * (motorForce * 2.5f);
-       		}
-       		else if(m_verticalInput < 0){
-       			gear.text = "R";
-       			rearDriverW.motorTorque = m_verticalInput * motorForce;
-            	rearPassengerW.motorTorque = m_verticalInput * motorForce;
-       		}
-       	}
-    }
+        else{
+            return;
+        }
 	}
 
     private void ChangeGear(){
