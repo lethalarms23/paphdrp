@@ -9,7 +9,6 @@ public class GearSelect : MonoBehaviour
     private Text gear;
     public GameObject gearType;
     private Text gearmode;
-	private int text;
 
     public void Start(){
     	gear = gearText.GetComponent<Text>();
@@ -30,32 +29,13 @@ public class GearSelect : MonoBehaviour
 			}
     	}
 
-		//Mudanças Sequencias
-		if(gearmode.text == "Seq"){
-			if(Input.GetKeyUp(KeyCode.LeftShift)){
-				if(gear.text == "N"){
-					gear.text = "1";
-				}
-				else{
-					if((int.Parse(gear.text) + 1) != 7){
-						gear.text = (int.Parse(gear.text) + 1).ToString();
-					}
-				return;
-				}
+		//Mudanças Automáticas
+		if(gearmode.text == "Auto"){
+			if(Input.GetAxis("Vertical") > 0 && gear.text == "N"){
+				gear.text = "D";
 			}
-			else if(Input.GetKeyUp(KeyCode.LeftControl)){
-				if(gear.text == "N"){
-					gear.text = "R";
-				}
-				else if(gear.text == "1"){
-					gear.text = "N";
-				}
-				else{
-					if(int.Parse(gear.text) > 1){
-						gear.text = (int.Parse(gear.text) - 1).ToString();
-					}
-				return;
-				}
+			else if(Input.GetAxis("Vertical") < 0 && gear.text == "N"){
+				gear.text = "R";
 			}
 		}
     }
