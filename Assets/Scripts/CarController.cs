@@ -9,12 +9,15 @@ using UnityEngine.UI;
 
 public class CarController : MonoBehaviour
 {
+    //Guarda nas variaveis o input do teclado.
     public void GetInput()
     {
         m_horizontalInput = Input.GetAxis("Horizontal");
         m_verticalInput = Input.GetAxis("Vertical");
     }
 
+    /*Pega no input do teclado aplica as rodas das frente o metodo SteerAngle,
+    movimentação da roda, é invisivel.*/
     private void Steer()
     {
         m_steeringAngle = maxSteerAngle * m_horizontalInput;
@@ -22,6 +25,7 @@ public class CarController : MonoBehaviour
         frontPassengerW.steerAngle = m_steeringAngle;
     }
 
+    /*Pega na função de cima, Steer(), é aplica fisicamente ao carro, é visivel */
     private void WheelTurn(){
     	float x = wheel.eulerAngles.x;
     	float y = wheel.eulerAngles.y;
@@ -31,6 +35,7 @@ public class CarController : MonoBehaviour
     	wheel.eulerAngles = steer;
     }
 
+    /*Vê se a tecla presionada foi o espaço mete os travões de tras 2x mais forte.*/
     private void HandBrake()
     {
         if (Input.GetKey(KeyCode.Space))
@@ -47,23 +52,23 @@ public class CarController : MonoBehaviour
         }
     }
 
-    private void Brakes(){
-        if(gear.text != "N" && gear.text != "R"){
-            if(m_verticalInput < 0){
+    private void Brakes(){ //Função Travões
+        if(gear.text != "N" && gear.text != "R"){ //Verifica se está em neutra ou em marcha-atrás
+            if(m_verticalInput < 0){ //Verifica se o Input Do teclado é negativo(Tá a carregar no S ou Seta pra baixo)
                 rearDriverW.brakeTorque = brakeForce / 4;
                 rearPassengerW.brakeTorque = brakeForce / 4;
                 frontDriverW.brakeTorque = brakeForce / 3;
                 frontPassengerW.brakeTorque = brakeForce / 3;
             }
-            else if(HandBrakeCheck == false){
+            else if(HandBrakeCheck == false){ //Verifica se o travão de mão tá ativo e põe os valores dos travões a 0
                 rearDriverW.brakeTorque = 0;
                 rearPassengerW.brakeTorque = 0;
                 frontDriverW.brakeTorque = 0;
                 frontPassengerW.brakeTorque = 0;
             }
         }
-        else if(gear.text == "R"){
-        	if(m_verticalInput > 0){
+        else if(gear.text == "R"){ //Verifica se tá em marcha-atrás
+        	if(m_verticalInput > 0){ //Se tiver e carregar no W (m_verticalInput = 1) trava o carro
                 rearDriverW.brakeTorque = brakeForce / 4;
                 rearPassengerW.brakeTorque = brakeForce / 4;
                 frontDriverW.brakeTorque = brakeForce / 3;
@@ -80,35 +85,35 @@ public class CarController : MonoBehaviour
 
     private void Accelerate()
     {
- 		if(gear.text == "R"){
+ 		if(gear.text == "R"){//Verifica se esta em marcha-atras as rodas andam para tras.
            	rearDriverW.motorTorque = m_verticalInput * motorForce;
            	rearPassengerW.motorTorque = m_verticalInput * motorForce;
         }
-        else if(gear.text == "1"){
+        else if(gear.text == "1"){//Verifica se esta em 1 se tiver as rodas andam para frente numa velocidade de 5 * 2.5
            	rearDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
            	rearPassengerW.motorTorque = m_verticalInput * (motorForce * 2.5f);
         }
-        else if(gear.text == "2"){
+        else if(gear.text == "2"){//Verifica se esta em 2 se tiver as rodas andam para frente numa velocidade de 5 * 2
            	rearDriverW.motorTorque = m_verticalInput * (motorForce * 2);
            	rearPassengerW.motorTorque = m_verticalInput * (motorForce * 2);
         }
-        else if(gear.text == "3"){
+        else if(gear.text == "3"){//Verifica se esta em 3 se tiver as rodas andam para frente numa velocidade de 5 * 1.5
            	rearDriverW.motorTorque = m_verticalInput * (motorForce * 1.5f);
            	rearPassengerW.motorTorque = m_verticalInput * (motorForce * 1.5f);
         }
-        else if(gear.text == "4"){
+        else if(gear.text == "4"){//Verifica se esta em 4 se tiver as rodas andam para frente numa velocidade de 5 * 1
           	rearDriverW.motorTorque = m_verticalInput * (motorForce * 1);
            	rearPassengerW.motorTorque = m_verticalInput * (motorForce * 1);
         }
-        else if(gear.text == "5"){
+        else if(gear.text == "5"){//Verifica se esta em 5 se tiver as rodas andam para frente numa velocidade de 5 * 5
            	rearDriverW.motorTorque = m_verticalInput * (motorForce * .5f);
            	rearPassengerW.motorTorque = m_verticalInput * (motorForce * .5f);
         }
-        else if(gear.text == "6"){
+        else if(gear.text == "6"){//Verifica se esta em 1 se tiver as rodas andam para frente numa velocidade de 5
            	rearDriverW.motorTorque = m_verticalInput * (motorForce);
            	rearPassengerW.motorTorque = m_verticalInput * (motorForce);
         }
-        else if(gear.text == "D"){
+        else if(gear.text == "D"){//Verifica se esta em 1 se tiver as rodas andam para frente numa velocidade de 5 * 2.5
         	rearDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
            	rearPassengerW.motorTorque = m_verticalInput * (motorForce * 2.5f);
         }
@@ -117,15 +122,16 @@ public class CarController : MonoBehaviour
         }
 	}
 
-    private void ChangeGear(){
-    	if(gear.text == "D" && speedtext.text == "0"){
+    private void ChangeGear(){//Só para carros automaticos
+    	if(gear.text == "D" && speedtext.text == "0"){//Se tiver em D e a velocidade for 0 passa para N, neutra.
     		gear.text = "N";
     	}
-    	else if(gear.text == "R" && speedtext.text == "0"){
+    	else if(gear.text == "R" && speedtext.text == "0"){//Se tiver em R e a velocidade for 0 passa para N, neutra.
     		gear.text = "N";
     	}
     }
 
+    /*Chama 4 vezes a mesma função mas de cada so manda 1 roda diferente */
     private void UpdateWheelPoses()
     {
         UpdateWheelPose(frontDriverW, frontDriverT);
@@ -134,6 +140,7 @@ public class CarController : MonoBehaviour
         UpdateWheelPose(rearPassengerW, rearPassengerT);
     }
 
+    /*pega no collider que recebe da função de cima e aplica rotação e posição as rodas */
     private void UpdateWheelPose(WheelCollider _collider, Transform _transform)
     {
         Vector3 _pos = _transform.position;
@@ -145,6 +152,7 @@ public class CarController : MonoBehaviour
         _transform.rotation = _quat;
     }
 
+    //Chama todas estas funções
     private void FixedUpdate()
     {
         GetInput();
@@ -157,6 +165,7 @@ public class CarController : MonoBehaviour
         ChangeGear();
     }
 
+    //Atribui estas variaveis um GetComponent de texto 
     private void Start(){
         gear = gearText.GetComponent<Text>();
         gearmode = geartype.GetComponent<Text>();

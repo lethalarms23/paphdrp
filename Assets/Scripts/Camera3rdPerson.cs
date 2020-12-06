@@ -17,6 +17,7 @@ public class Camera3rdPerson : MonoBehaviour
     float yaw;
     float pitch;
 
+    //Só é usada no incio do jogo e serve para esconder o rato
     void Start()
     {
         if (lockCursor)
@@ -26,6 +27,7 @@ public class Camera3rdPerson : MonoBehaviour
         }
     }
 
+    //Atribui as variaveis o input do rato e consoante o valor gira em volta do target(personagem)
     void LateUpdate()
     {
         yaw += Input.GetAxis("Mouse X") * mouseSensivity;
