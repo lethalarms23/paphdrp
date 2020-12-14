@@ -8,6 +8,7 @@ public class Camera3rdPerson : MonoBehaviour
     public float mouseSensivity;
     public Transform target;
     public float distanceFromTarget = 2;
+    public float distance;
     
     public Vector2 pitchMinMax = new Vector2(-40, 85);
 
@@ -32,7 +33,9 @@ public class Camera3rdPerson : MonoBehaviour
 
     public void zoomTarget(){
         zoom = -(Input.GetAxis("Mouse ScrollWheel") * zoomSens);
-        distanceFromTarget += zoom;
+        if((distanceFromTarget + zoom) < 15 && (distanceFromTarget + zoom) > 4 ){
+            distanceFromTarget += zoom;
+        }
     }
 
     //Atribui as variaveis o input do rato e consoante o valor gira em volta do target(personagem)
