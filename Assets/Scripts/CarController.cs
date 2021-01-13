@@ -21,8 +21,14 @@ public class CarController : MonoBehaviour
     private void Steer()
     {
         m_steeringAngle = maxSteerAngle * m_horizontalInput;
-        frontDriverW.steerAngle = m_steeringAngle;
-        frontPassengerW.steerAngle = m_steeringAngle;
+        if(Convert.ToInt32(speedtext) > 10){
+            frontDriverW.steerAngle = m_steeringAngle - 17;
+            frontPassengerW.steerAngle = m_steeringAngle - 17;
+        }
+        else{
+            frontDriverW.steerAngle = m_steeringAngle;
+            frontPassengerW.steerAngle = m_steeringAngle;
+        }
     }
 
     /*Pega na função de cima, Steer(), é aplica fisicamente ao carro, é visivel */
@@ -67,8 +73,10 @@ public class CarController : MonoBehaviour
         }
         else if(gear.text == "R"){ //Verifica se tá em marcha-atrás
         	if(m_verticalInput > 0){ //Se tiver e carregar no W (m_verticalInput = 1) trava o carro
-                frontDriverW.brakeTorque = brakeForce / 3;
-                frontPassengerW.brakeTorque = brakeForce / 3;
+                frontDriverW.brakeTorque = brakeForce;
+                frontPassengerW.brakeTorque = brakeForce;
+                rearDriverW.brakeTorque = brakeForce / 10;
+                rearPassengerW.brakeTorque = brakeForce / 10;
             }
             else if(HandBrakeCheck == false){
                 rearDriverW.brakeTorque = 0;
@@ -92,56 +100,81 @@ public class CarController : MonoBehaviour
 
     private void Accelerate()
     {
- 		if(gear.text == "R"){//Verifica se esta em marcha-atras as rodas andam para tras.
-           	rearDriverW.motorTorque = m_verticalInput * motorForce;
-           	rearPassengerW.motorTorque = m_verticalInput * motorForce;
-            frontDriverW.motorTorque = m_verticalInput * motorForce;
-           	frontPassengerW.motorTorque = m_verticalInput * motorForce;
+        if(gearbox == "AWD"){
+            if(gear.text == "R" || gear.text == "6"){//Verifica se esta em marcha-atras as rodas andam para tras.
+           	    rearDriverW.motorTorque = m_verticalInput * motorForce;
+           	    rearPassengerW.motorTorque = m_verticalInput * motorForce;
+                frontDriverW.motorTorque = m_verticalInput * motorForce;
+           	    frontPassengerW.motorTorque = m_verticalInput * motorForce;
+            }
+            else if(gear.text == "D" || gear.text == "1"){//Verifica se esta em 1 (Automatico) se tiver as rodas andam para frente numa velocidade de 5 * 2.5
+        	    rearDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
+           	    rearPassengerW.motorTorque = m_verticalInput * (motorForce * 2.5f);
+                frontDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
+           	    frontDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
+            }
+            else if(gear.text == "2"){//Verifica se esta em 2 se tiver as rodas andam para frente numa velocidade de 5 * 2
+           	    rearDriverW.motorTorque = m_verticalInput * (motorForce * 2);
+           	    rearPassengerW.motorTorque = m_verticalInput * (motorForce * 2);
+                frontDriverW.motorTorque = m_verticalInput * (motorForce * 2);
+           	    frontDriverW.motorTorque = m_verticalInput * (motorForce * 2);
+            }
+            else if(gear.text == "3"){//Verifica se esta em 3 se tiver as rodas andam para frente numa velocidade de 5 * 1.5
+           	    rearDriverW.motorTorque = m_verticalInput * (motorForce * 1.5f);
+           	    rearPassengerW.motorTorque = m_verticalInput * (motorForce * 1.5f);
+                frontDriverW.motorTorque = m_verticalInput * (motorForce * 1.5f);
+           	    frontDriverW.motorTorque = m_verticalInput * (motorForce * 1.5f);
+            }
+            else if(gear.text == "4"){//Verifica se esta em 4 se tiver as rodas andam para frente numa velocidade de 5 * 1
+          	    rearDriverW.motorTorque = m_verticalInput * (motorForce * 1);
+           	    rearPassengerW.motorTorque = m_verticalInput * (motorForce * 1);
+                frontDriverW.motorTorque = m_verticalInput * (motorForce * 1);
+           	    frontDriverW.motorTorque = m_verticalInput * (motorForce * 1);
+            }
+            else if(gear.text == "5"){//Verifica se esta em 5 se tiver as rodas andam para frente numa velocidade de 5 * 5
+           	    rearDriverW.motorTorque = m_verticalInput * (motorForce * .5f);
+           	    rearPassengerW.motorTorque = m_verticalInput * (motorForce * .5f);
+                frontDriverW.motorTorque = m_verticalInput * (motorForce * .5f);
+           	    frontDriverW.motorTorque = m_verticalInput * (motorForce * .5f);
+            }
         }
-        else if(gear.text == "D"){//Verifica se esta em 1 (Automatico) se tiver as rodas andam para frente numa velocidade de 5 * 2.5
-        	rearDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
-           	rearPassengerW.motorTorque = m_verticalInput * (motorForce * 2.5f);
-            frontDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
-           	frontDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
-        }
-        else if(gear.text == "1"){//Verifica se esta em 1 se tiver as rodas andam para frente numa velocidade de 5 * 2.5
-           	rearDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
-           	rearPassengerW.motorTorque = m_verticalInput * (motorForce * 2.5f);
-            frontDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
-           	frontPassengerW.motorTorque = m_verticalInput * (motorForce * 2.5f);
-        }
-        else if(gear.text == "2"){//Verifica se esta em 2 se tiver as rodas andam para frente numa velocidade de 5 * 2
-           	rearDriverW.motorTorque = m_verticalInput * (motorForce * 2);
-           	rearPassengerW.motorTorque = m_verticalInput * (motorForce * 2);
-            frontDriverW.motorTorque = m_verticalInput * (motorForce * 2);
-           	frontDriverW.motorTorque = m_verticalInput * (motorForce * 2);
-        }
-        else if(gear.text == "3"){//Verifica se esta em 3 se tiver as rodas andam para frente numa velocidade de 5 * 1.5
-           	rearDriverW.motorTorque = m_verticalInput * (motorForce * 1.5f);
-           	rearPassengerW.motorTorque = m_verticalInput * (motorForce * 1.5f);
-            frontDriverW.motorTorque = m_verticalInput * (motorForce * 1.5f);
-           	frontDriverW.motorTorque = m_verticalInput * (motorForce * 1.5f);
-        }
-        else if(gear.text == "4"){//Verifica se esta em 4 se tiver as rodas andam para frente numa velocidade de 5 * 1
-          	rearDriverW.motorTorque = m_verticalInput * (motorForce * 1);
-           	rearPassengerW.motorTorque = m_verticalInput * (motorForce * 1);
-            frontDriverW.motorTorque = m_verticalInput * (motorForce * 1);
-           	frontDriverW.motorTorque = m_verticalInput * (motorForce * 1);
-        }
-        else if(gear.text == "5"){//Verifica se esta em 5 se tiver as rodas andam para frente numa velocidade de 5 * 5
-           	rearDriverW.motorTorque = m_verticalInput * (motorForce * .5f);
-           	rearPassengerW.motorTorque = m_verticalInput * (motorForce * .5f);
-            frontDriverW.motorTorque = m_verticalInput * (motorForce * .5f);
-           	frontDriverW.motorTorque = m_verticalInput * (motorForce * .5f);
-        }
-        else if(gear.text == "6"){//Verifica se esta em 1 se tiver as rodas andam para frente numa velocidade de 5
-           	rearDriverW.motorTorque = m_verticalInput * (motorForce);
-           	rearPassengerW.motorTorque = m_verticalInput * (motorForce);
-            frontDriverW.motorTorque = m_verticalInput * (motorForce);
-           	frontDriverW.motorTorque = m_verticalInput * (motorForce);
-        }
-        else{
-            return;
+        else if(gearbox=="RWD"){
+            if(gear.text == "R" || gear.text == "6"){//Verifica se esta em marcha-atras as rodas andam para tras.
+           	    rearDriverW.motorTorque = m_verticalInput * motorForce;
+           	    rearPassengerW.motorTorque = m_verticalInput * motorForce;
+                frontDriverW.motorTorque = m_verticalInput * motorForce;
+           	    frontPassengerW.motorTorque = m_verticalInput * motorForce;
+            }
+            else if(gear.text == "D" || gear.text == "1"){//Verifica se esta em 1 (Automatico) se tiver as rodas andam para frente numa velocidade de 5 * 2.5
+        	    rearDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
+           	    rearPassengerW.motorTorque = m_verticalInput * (motorForce * 2.5f);
+                frontDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
+           	    frontDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
+            }
+            else if(gear.text == "2"){//Verifica se esta em 2 se tiver as rodas andam para frente numa velocidade de 5 * 2
+           	    rearDriverW.motorTorque = m_verticalInput * (motorForce * 2);
+           	    rearPassengerW.motorTorque = m_verticalInput * (motorForce * 2);
+                frontDriverW.motorTorque = m_verticalInput * (motorForce * 2);
+           	    frontDriverW.motorTorque = m_verticalInput * (motorForce * 2);
+            }
+            else if(gear.text == "3"){//Verifica se esta em 3 se tiver as rodas andam para frente numa velocidade de 5 * 1.5
+           	    rearDriverW.motorTorque = m_verticalInput * (motorForce * 1.5f);
+           	    rearPassengerW.motorTorque = m_verticalInput * (motorForce * 1.5f);
+                frontDriverW.motorTorque = m_verticalInput * (motorForce * 1.5f);
+           	    frontDriverW.motorTorque = m_verticalInput * (motorForce * 1.5f);
+            }
+            else if(gear.text == "4"){//Verifica se esta em 4 se tiver as rodas andam para frente numa velocidade de 5 * 1
+          	    rearDriverW.motorTorque = m_verticalInput * (motorForce * 1);
+           	    rearPassengerW.motorTorque = m_verticalInput * (motorForce * 1);
+                frontDriverW.motorTorque = m_verticalInput * (motorForce * 1);
+           	    frontDriverW.motorTorque = m_verticalInput * (motorForce * 1);
+            }
+            else if(gear.text == "5"){//Verifica se esta em 5 se tiver as rodas andam para frente numa velocidade de 5 * 5
+           	    rearDriverW.motorTorque = m_verticalInput * (motorForce * .5f);
+           	    rearPassengerW.motorTorque = m_verticalInput * (motorForce * .5f);
+                frontDriverW.motorTorque = m_verticalInput * (motorForce * .5f);
+           	    frontDriverW.motorTorque = m_verticalInput * (motorForce * .5f);
+            }
         }
 	}
 
@@ -210,6 +243,8 @@ public class CarController : MonoBehaviour
     public float motorForce = 5;
     public float brakeForce = 700;
     public bool HandBrakeCheck = false;
+    public bool isAccel = false;
+    public string gearbox = "";
 
     public GameObject gearText;
     private Text gear;

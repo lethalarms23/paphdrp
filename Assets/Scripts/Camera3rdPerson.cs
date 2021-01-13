@@ -8,6 +8,8 @@ public class Camera3rdPerson : MonoBehaviour
     public float mouseSensivity;
     public Transform target;
     public float distanceFromTarget = 2;
+    public float maxZoom = 15;
+    public float minZoom = 4;
     public float distance;
     
     public Vector2 pitchMinMax = new Vector2(-40, 85);
@@ -33,7 +35,7 @@ public class Camera3rdPerson : MonoBehaviour
 
     public void zoomTarget(){
         zoom = -(Input.GetAxis("Mouse ScrollWheel") * zoomSens);
-        if((distanceFromTarget + zoom) < 15 && (distanceFromTarget + zoom) > 4 ){
+        if((distanceFromTarget + zoom) < maxZoom && (distanceFromTarget + zoom) > minZoom ){
             distanceFromTarget += zoom;
         }
     }
