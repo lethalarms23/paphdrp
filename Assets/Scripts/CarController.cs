@@ -9,29 +9,20 @@ using UnityEngine.UI;
 
 public class CarController : MonoBehaviour
 {
-    //Guarda nas variaveis o input do teclado.
+
     public void GetInput()
     {
         m_horizontalInput = Input.GetAxis("Horizontal");
         m_verticalInput = Input.GetAxis("Vertical");
     }
 
-    /*Pega no input do teclado aplica as rodas das frente o metodo SteerAngle,
-    movimentação da roda, é invisivel.*/
     private void Steer()
     {
         m_steeringAngle = maxSteerAngle * m_horizontalInput;
-        if(Convert.ToInt32(speedtext) > 10){
-            frontDriverW.steerAngle = m_steeringAngle - 17;
-            frontPassengerW.steerAngle = m_steeringAngle - 17;
-        }
-        else{
-            frontDriverW.steerAngle = m_steeringAngle;
-            frontPassengerW.steerAngle = m_steeringAngle;
-        }
+        frontDriverW.steerAngle = m_steeringAngle;
+        frontPassengerW.steerAngle = m_steeringAngle;
     }
 
-    /*Pega na função de cima, Steer(), é aplica fisicamente ao carro, é visivel */
     private void WheelTurn(){
     	float x = wheel.eulerAngles.x;
     	float y = wheel.eulerAngles.y;
@@ -41,7 +32,6 @@ public class CarController : MonoBehaviour
     	wheel.eulerAngles = steer;
     }
 
-    /*Vê se a tecla presionada foi o espaço mete os travões de tras 2x mais forte.*/
     private void HandBrake()
     {
         if (Input.GetKey(KeyCode.Space))
@@ -58,29 +48,24 @@ public class CarController : MonoBehaviour
         }
     }
 
-    private void Brakes(){ //Função Travões
-        if(gear.text != "N" && gear.text != "R"){ //Verifica se está em neutra ou em marcha-atrás
-            if(m_verticalInput < 0){ //Verifica se o Input Do teclado é negativo(Tá a carregar no S ou Seta pra baixo)
+    private void Brakes(){
+        if(gear == "D"){
+            if(m_verticalInput < 0){
                 frontDriverW.brakeTorque = brakeForce / 3;
                 frontPassengerW.brakeTorque = brakeForce / 3;
+                
             }
-            else if(HandBrakeCheck == false){ //Verifica se o travão de mão tá ativo e põe os valores dos travões a 0
-                rearDriverW.brakeTorque = 0;
-                rearPassengerW.brakeTorque = 0;
+            else{
                 frontDriverW.brakeTorque = 0;
                 frontPassengerW.brakeTorque = 0;
             }
         }
-        else if(gear.text == "R"){ //Verifica se tá em marcha-atrás
-        	if(m_verticalInput > 0){ //Se tiver e carregar no W (m_verticalInput = 1) trava o carro
-                frontDriverW.brakeTorque = brakeForce;
-                frontPassengerW.brakeTorque = brakeForce;
-                rearDriverW.brakeTorque = brakeForce / 10;
-                rearPassengerW.brakeTorque = brakeForce / 10;
+        else if(gear == "R"){
+            if(m_verticalInput > 0){
+                frontDriverW.brakeTorque = brakeForce / 3;
+                frontPassengerW.brakeTorque = brakeForce / 3;
             }
-            else if(HandBrakeCheck == false){
-                rearDriverW.brakeTorque = 0;
-                rearPassengerW.brakeTorque = 0;
+            else{
                 frontDriverW.brakeTorque = 0;
                 frontPassengerW.brakeTorque = 0;
             }
@@ -88,7 +73,7 @@ public class CarController : MonoBehaviour
     }
 
     private void burnout(){
-        if(Input.GetKeyDown(KeyCode.W) && Input.GetKeyDown(KeyCode.S) && speedtext.text == "0"){
+        if(Input.GetKeyDown(KeyCode.W) && Input.GetKeyDown(KeyCode.S) && speed == "0"){
             rearDriverW.motorTorque = 1 * motorForce;
            	rearPassengerW.motorTorque = 1 * motorForce;
             frontDriverW.brakeTorque = brakeForce * 9000;
@@ -98,96 +83,39 @@ public class CarController : MonoBehaviour
         }
     }
 
+    private void Velocity(){
+        carVelocity = (rigidCar.velocity.magnitude * 2.237f * Time.deltaTime) * 100;
+		if(carVelocity < 1){
+			speed = "0";
+		}
+		else{
+			speed = carVelocity.ToString("#");
+		}
+    }
+
     private void Accelerate()
     {
-        if(gearbox == "AWD"){
-            if(gear.text == "R" || gear.text == "6"){//Verifica se esta em marcha-atras as rodas andam para tras.
-           	    rearDriverW.motorTorque = m_verticalInput * motorForce;
-           	    rearPassengerW.motorTorque = m_verticalInput * motorForce;
-                frontDriverW.motorTorque = m_verticalInput * motorForce;
-           	    frontPassengerW.motorTorque = m_verticalInput * motorForce;
-            }
-            else if(gear.text == "D" || gear.text == "1"){//Verifica se esta em 1 (Automatico) se tiver as rodas andam para frente numa velocidade de 5 * 2.5
-        	    rearDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
-           	    rearPassengerW.motorTorque = m_verticalInput * (motorForce * 2.5f);
-                frontDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
-           	    frontDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
-            }
-            else if(gear.text == "2"){//Verifica se esta em 2 se tiver as rodas andam para frente numa velocidade de 5 * 2
-           	    rearDriverW.motorTorque = m_verticalInput * (motorForce * 2);
-           	    rearPassengerW.motorTorque = m_verticalInput * (motorForce * 2);
-                frontDriverW.motorTorque = m_verticalInput * (motorForce * 2);
-           	    frontDriverW.motorTorque = m_verticalInput * (motorForce * 2);
-            }
-            else if(gear.text == "3"){//Verifica se esta em 3 se tiver as rodas andam para frente numa velocidade de 5 * 1.5
-           	    rearDriverW.motorTorque = m_verticalInput * (motorForce * 1.5f);
-           	    rearPassengerW.motorTorque = m_verticalInput * (motorForce * 1.5f);
-                frontDriverW.motorTorque = m_verticalInput * (motorForce * 1.5f);
-           	    frontDriverW.motorTorque = m_verticalInput * (motorForce * 1.5f);
-            }
-            else if(gear.text == "4"){//Verifica se esta em 4 se tiver as rodas andam para frente numa velocidade de 5 * 1
-          	    rearDriverW.motorTorque = m_verticalInput * (motorForce * 1);
-           	    rearPassengerW.motorTorque = m_verticalInput * (motorForce * 1);
-                frontDriverW.motorTorque = m_verticalInput * (motorForce * 1);
-           	    frontDriverW.motorTorque = m_verticalInput * (motorForce * 1);
-            }
-            else if(gear.text == "5"){//Verifica se esta em 5 se tiver as rodas andam para frente numa velocidade de 5 * 5
-           	    rearDriverW.motorTorque = m_verticalInput * (motorForce * .5f);
-           	    rearPassengerW.motorTorque = m_verticalInput * (motorForce * .5f);
-                frontDriverW.motorTorque = m_verticalInput * (motorForce * .5f);
-           	    frontDriverW.motorTorque = m_verticalInput * (motorForce * .5f);
-            }
-        }
-        else if(gearbox=="RWD"){
-            if(gear.text == "R" || gear.text == "6"){//Verifica se esta em marcha-atras as rodas andam para tras.
-           	    rearDriverW.motorTorque = m_verticalInput * motorForce;
-           	    rearPassengerW.motorTorque = m_verticalInput * motorForce;
-                frontDriverW.motorTorque = m_verticalInput * motorForce;
-           	    frontPassengerW.motorTorque = m_verticalInput * motorForce;
-            }
-            else if(gear.text == "D" || gear.text == "1"){//Verifica se esta em 1 (Automatico) se tiver as rodas andam para frente numa velocidade de 5 * 2.5
-        	    rearDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
-           	    rearPassengerW.motorTorque = m_verticalInput * (motorForce * 2.5f);
-                frontDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
-           	    frontDriverW.motorTorque = m_verticalInput * (motorForce * 2.5f);
-            }
-            else if(gear.text == "2"){//Verifica se esta em 2 se tiver as rodas andam para frente numa velocidade de 5 * 2
-           	    rearDriverW.motorTorque = m_verticalInput * (motorForce * 2);
-           	    rearPassengerW.motorTorque = m_verticalInput * (motorForce * 2);
-                frontDriverW.motorTorque = m_verticalInput * (motorForce * 2);
-           	    frontDriverW.motorTorque = m_verticalInput * (motorForce * 2);
-            }
-            else if(gear.text == "3"){//Verifica se esta em 3 se tiver as rodas andam para frente numa velocidade de 5 * 1.5
-           	    rearDriverW.motorTorque = m_verticalInput * (motorForce * 1.5f);
-           	    rearPassengerW.motorTorque = m_verticalInput * (motorForce * 1.5f);
-                frontDriverW.motorTorque = m_verticalInput * (motorForce * 1.5f);
-           	    frontDriverW.motorTorque = m_verticalInput * (motorForce * 1.5f);
-            }
-            else if(gear.text == "4"){//Verifica se esta em 4 se tiver as rodas andam para frente numa velocidade de 5 * 1
-          	    rearDriverW.motorTorque = m_verticalInput * (motorForce * 1);
-           	    rearPassengerW.motorTorque = m_verticalInput * (motorForce * 1);
-                frontDriverW.motorTorque = m_verticalInput * (motorForce * 1);
-           	    frontDriverW.motorTorque = m_verticalInput * (motorForce * 1);
-            }
-            else if(gear.text == "5"){//Verifica se esta em 5 se tiver as rodas andam para frente numa velocidade de 5 * 5
-           	    rearDriverW.motorTorque = m_verticalInput * (motorForce * .5f);
-           	    rearPassengerW.motorTorque = m_verticalInput * (motorForce * .5f);
-                frontDriverW.motorTorque = m_verticalInput * (motorForce * .5f);
-           	    frontDriverW.motorTorque = m_verticalInput * (motorForce * .5f);
-            }
-        }
+        rearDriverW.motorTorque = m_verticalInput * motorForce;
+        rearPassengerW.motorTorque = m_verticalInput * motorForce;
+        frontDriverW.motorTorque = m_verticalInput * motorForce;
+        frontPassengerW.motorTorque = m_verticalInput * motorForce;
 	}
 
-    private void ChangeGear(){//Só para carros automaticos
-    	if(gear.text == "D" && speedtext.text == "0"){//Se tiver em D e a velocidade for 0 passa para N, neutra.
-    		gear.text = "N";
+    private void ChangeGear(){
+        if(gear == "N" && m_verticalInput > 0 ){
+            gear = "D";
+        }
+        else if(gear == "N" && m_verticalInput < 0){
+            gear = "R";
+        }
+    	else if(gear == "D" && speed == "0"){
+    		gear = "N";
     	}
-    	else if(gear.text == "R" && speedtext.text == "0"){//Se tiver em R e a velocidade for 0 passa para N, neutra.
-    		gear.text = "N";
+    	else if(gear == "R" && speed == "0"){
+    		gear = "N";
     	}
     }
 
-    /*Chama 4 vezes a mesma função mas de cada so manda 1 roda diferente */
     private void UpdateWheelPoses()
     {
         UpdateWheelPose(frontDriverW, frontDriverT);
@@ -196,7 +124,6 @@ public class CarController : MonoBehaviour
         UpdateWheelPose(rearPassengerW, rearPassengerT);
     }
 
-    /*pega no collider que recebe da função de cima e aplica rotação e posição as rodas */
     private void UpdateWheelPose(WheelCollider _collider, Transform _transform)
     {
         Vector3 _pos = _transform.position;
@@ -208,7 +135,6 @@ public class CarController : MonoBehaviour
         _transform.rotation = _quat;
     }
 
-    //Chama todas estas funções
     private void FixedUpdate()
     {
         GetInput();
@@ -218,15 +144,9 @@ public class CarController : MonoBehaviour
         HandBrake();
         WheelTurn();
         Brakes();
+        Velocity();
         UpdateWheelPoses();
         ChangeGear();
-    }
-
-    //Atribui estas variaveis um GetComponent de texto 
-    private void Start(){
-        gear = gearText.GetComponent<Text>();
-        gearmode = geartype.GetComponent<Text>();
-        speedtext = speed.GetComponent<Text>();
     }
 
 
@@ -243,15 +163,9 @@ public class CarController : MonoBehaviour
     public float motorForce = 5;
     public float brakeForce = 700;
     public bool HandBrakeCheck = false;
-    public bool isAccel = false;
     public string gearbox = "";
-
-    public GameObject gearText;
-    private Text gear;
-
-    public GameObject geartype;
-    private Text gearmode;
-
-    public GameObject speed;
-    private Text speedtext;
+    public string gear = "N";
+    public string speed;
+    public float carVelocity;
+    public Rigidbody rigidCar;
 }
