@@ -5,7 +5,6 @@ using System.Collections.Specialized;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class CarController : MonoBehaviour
 {
@@ -49,35 +48,21 @@ public class CarController : MonoBehaviour
     }
 
     private void Brakes(){
-        if(gear == "D"){
-            if(m_verticalInput < 0){
-                frontDriverW.brakeTorque = brakeForce / 3;
-                frontPassengerW.brakeTorque = brakeForce / 3;
-                
-            }
-            else{
-                frontDriverW.brakeTorque = 0;
-                frontPassengerW.brakeTorque = 0;
-            }
+        if(m_verticalInput < 0 && gear == "D"){
+            frontDriverW.brakeTorque = brakeForce * 20;
+            frontPassengerW.brakeTorque = brakeForce * 20;
+            rearDriverW.brakeTorque = brakeForce * 10;
+            rearPassengerW.brakeTorque = brakeForce * 10;
         }
-        else if(gear == "R"){
-            if(m_verticalInput > 0){
-                frontDriverW.brakeTorque = brakeForce / 3;
-                frontPassengerW.brakeTorque = brakeForce / 3;
-            }
-            else{
-                frontDriverW.brakeTorque = 0;
-                frontPassengerW.brakeTorque = 0;
-            }
+        else if(m_verticalInput > 0 && gear == "R"){
+            frontDriverW.brakeTorque = brakeForce * 20;
+            frontPassengerW.brakeTorque = brakeForce * 20;
+            rearDriverW.brakeTorque = brakeForce * 10;
+            rearPassengerW.brakeTorque = brakeForce * 10;
         }
-    }
-
-    private void burnout(){
-        if(Input.GetKeyDown(KeyCode.W) && Input.GetKeyDown(KeyCode.S) && speed == "0"){
-            rearDriverW.motorTorque = 1 * motorForce;
-           	rearPassengerW.motorTorque = 1 * motorForce;
-            frontDriverW.brakeTorque = brakeForce * 9000;
-            frontPassengerW.brakeTorque = brakeForce * 9000;
+        else{
+            frontDriverW.brakeTorque = 0;
+            frontPassengerW.brakeTorque = 0;
             rearDriverW.brakeTorque = 0;
             rearPassengerW.brakeTorque = 0;
         }
@@ -95,25 +80,38 @@ public class CarController : MonoBehaviour
 
     private void Accelerate()
     {
-        rearDriverW.motorTorque = m_verticalInput * motorForce;
-        rearPassengerW.motorTorque = m_verticalInput * motorForce;
-        frontDriverW.motorTorque = m_verticalInput * motorForce;
-        frontPassengerW.motorTorque = m_verticalInput * motorForce;
+        if(gearbox == "AWD"){
+            if(gear == "D" || gear == "N"){
+                rearDriverW.motorTorque = m_verticalInput * motorForce;
+                rearPassengerW.motorTorque = m_verticalInput * motorForce;
+                frontDriverW.motorTorque = m_verticalInput * motorForce;
+                frontPassengerW.motorTorque = m_verticalInput * motorForce;
+            }
+        }
+        else if(gearbox == "RWD"){
+            if(gear == "D" || gear == "N"){
+                rearDriverW.motorTorque = m_verticalInput * motorForce;
+                rearPassengerW.motorTorque = m_verticalInput * motorForce;
+            }
+        }
+
 	}
 
     private void ChangeGear(){
-        if(gear == "N" && m_verticalInput > 0 ){
-            gear = "D";
+        if(gear == "N"){
+            if(m_verticalInput > 0){
+                gear = "D";
+            }
+            else if(m_verticalInput < 0){
+                gear = "R";
+            }
         }
-        else if(gear == "N" && m_verticalInput < 0){
-            gear = "R";
+        else if(gear == "D" && speed == "0"){
+            gear = "N";
         }
-    	else if(gear == "D" && speed == "0"){
-    		gear = "N";
-    	}
-    	else if(gear == "R" && speed == "0"){
-    		gear = "N";
-    	}
+        else if(gear == "R" && speed == "0"){
+            gear = "N";
+        }
     }
 
     private void UpdateWheelPoses()
@@ -139,7 +137,6 @@ public class CarController : MonoBehaviour
     {
         GetInput();
         Steer();
-        burnout();
         Accelerate();  
         HandBrake();
         WheelTurn();
@@ -166,6 +163,7 @@ public class CarController : MonoBehaviour
     public string gearbox = "";
     public string gear = "N";
     public string speed;
+    public float shiftTime = 2f;
     public float carVelocity;
     public Rigidbody rigidCar;
 }
