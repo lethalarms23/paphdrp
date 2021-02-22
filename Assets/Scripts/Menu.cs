@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class Menu : MonoBehaviour
     public GameObject Rx7;
     public GameObject driftPlayground;
     public GameObject SunCity;
+    public GameObject Rx7Prefab;
+    public GameObject TitanPrefab;
 
     public GameObject PistaMenu;
     public GameObject CarroMenu;
@@ -26,27 +29,28 @@ public class Menu : MonoBehaviour
     }
 
     public void TitanSelect(){
-        titan.SetActive(true);
-        PistaMenu.SetActive(true);
+        PhotonNetwork.Instantiate(TitanPrefab.name, new Vector3(titan.transform.position.x, titan.transform.position.y,titan.transform.position.z),Quaternion.identity,0);
         CarroMenu.SetActive(false);
+        start.SetActive(true);
     }
 
     public void Rx7Select(){
-        Rx7.SetActive(true);
-        PistaMenu.SetActive(true);
-        CarroMenu.SetActive(false); 
-    }
+        //Rx7.SetActive(true);
+        PhotonNetwork.Instantiate(Rx7Prefab.name, new Vector3(Rx7.transform.position.x, Rx7.transform.position.y,Rx7.transform.position.z),Quaternion.identity,0);
+        CarroMenu.SetActive(false);
+        start.SetActive(true); 
+    }  
     
     public void driftPlaygroundSelect(){
         driftPlayground.SetActive(true);
         PistaMenu.SetActive(false);
-        start.SetActive(true);
+        CarroMenu.SetActive(true);
     }
 
     public void SunCitySelect(){
         SunCity.SetActive(true);
-        start.SetActive(true);
         PistaMenu.SetActive(false);
+        CarroMenu.SetActive(true);
     }
 
     public void BugHunter(){
@@ -54,8 +58,11 @@ public class Menu : MonoBehaviour
     }
 
     public void Play() {
-        CarroMenu.SetActive(true);
-        mainMenu.SetActive(false);
+        SceneManager.LoadScene("Game");
+    }
+
+    public void Multiplayer(){
+        SceneManager.LoadScene("OnlineMenu");
     }
 
     public void Options(){
