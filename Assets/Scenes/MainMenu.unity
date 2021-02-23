@@ -418,6 +418,8 @@ MonoBehaviour:
   Rx7: {fileID: 0}
   driftPlayground: {fileID: 0}
   SunCity: {fileID: 0}
+  Rx7Prefab: {fileID: 0}
+  TitanPrefab: {fileID: 0}
   PistaMenu: {fileID: 0}
   CarroMenu: {fileID: 0}
   start: {fileID: 0}

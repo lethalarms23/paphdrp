@@ -6,13 +6,20 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using UnityEngine;
 
-public class CarController : MonoBehaviour
+public class CarController : Photon.MonoBehaviour
 {
+
 
     public void GetInput()
     {
-        m_horizontalInput = Input.GetAxis("Horizontal");
-        m_verticalInput = Input.GetAxis("Vertical");
+        if(this.photonView.isMine == true){
+            m_horizontalInput = Input.GetAxis("Horizontal");
+            m_verticalInput = Input.GetAxis("Vertical");
+        }
+        else{
+            return;
+        }
+        
     }
 
     private void Steer()
@@ -166,4 +173,5 @@ public class CarController : MonoBehaviour
     public float shiftTime = 2f;
     public float carVelocity;
     public Rigidbody rigidCar;
+    public PhotonView photonView;
 }

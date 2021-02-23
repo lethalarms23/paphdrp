@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HUDSpeed : MonoBehaviour
+public class HUDSpeed : Photon.MonoBehaviour
 {
     public Rigidbody rigidCar;
     public float carVelocity;
@@ -11,6 +11,7 @@ public class HUDSpeed : MonoBehaviour
     public Transform ponteiro;
     public Text speed;
     public float z = 0;
+    public PhotonView photonView;
 
     public void Start() {
         z = ponteiro.eulerAngles.z;
@@ -34,7 +35,12 @@ public class HUDSpeed : MonoBehaviour
     }
 
     public void FixedUpdate() {
-        Velocity();
-        ponteiroFunc();
+        if(this.photonView.isMine == true){
+            Velocity();
+            ponteiroFunc();
+        }
+        else{
+            return;
+        }
     }
 }

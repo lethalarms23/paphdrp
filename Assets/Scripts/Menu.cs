@@ -35,7 +35,6 @@ public class Menu : MonoBehaviour
     }
 
     public void Rx7Select(){
-        //Rx7.SetActive(true);
         PhotonNetwork.Instantiate(Rx7Prefab.name, new Vector3(Rx7.transform.position.x, Rx7.transform.position.y,Rx7.transform.position.z),Quaternion.identity,0);
         CarroMenu.SetActive(false);
         start.SetActive(true); 

@@ -676,10 +676,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_FontSize: 40
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 4
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0
@@ -1658,7 +1658,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1143877584}
+      - m_Target: {fileID: 0}
         m_MethodName: PlayV2
         m_Mode: 1
         m_Arguments:
@@ -1819,7 +1819,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1143877585}
-  - component: {fileID: 1143877584}
   - component: {fileID: 1143877583}
   m_Layer: 0
   m_Name: ScriptHandle
@@ -1847,27 +1846,6 @@ MonoBehaviour:
   CreateGameInput: {fileID: 166106749}
   JoinGameInput: {fileID: 1708396087}
   StartButton: {fileID: 582259211}
---- !u!114 &1143877584
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1143877582}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb499b89cd5892e4aa1987cfa12a71bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  titan: {fileID: 0}
-  Rx7: {fileID: 0}
-  driftPlayground: {fileID: 0}
-  SunCity: {fileID: 0}
-  PistaMenu: {fileID: 0}
-  CarroMenu: {fileID: 0}
-  start: {fileID: 0}
-  mainMenu: {fileID: 0}
-  secondMenu: {fileID: 0}
 --- !u!4 &1143877585
 Transform:
   m_ObjectHideFlags: 0
@@ -1948,10 +1926,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_FontSize: 40
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 4
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0
