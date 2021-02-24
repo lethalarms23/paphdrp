@@ -56,7 +56,9 @@ public class Menu : MonoBehaviour
         Debug.Log("Pressed");
     }
 
-    public void Play() {
+    public void Play(){
+        PhotonNetwork.offlineMode = true;
+        PhotonNetwork.CreateRoom("single-player");
         SceneManager.LoadScene("Game");
     }
 

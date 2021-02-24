@@ -8,6 +8,7 @@ public class HUDSpeed : Photon.MonoBehaviour
     public Rigidbody rigidCar;
     public float carVelocity;
     public GameObject text;
+    public GameObject ponteiroSpeed;
     public Transform ponteiro;
     public Text speed;
     public float z = 0;
@@ -16,6 +17,10 @@ public class HUDSpeed : Photon.MonoBehaviour
     public void Start() {
         z = ponteiro.eulerAngles.z;
         speed = text.GetComponent<Text>();
+        if(!this.photonView.isMine){
+            Destroy(ponteiroSpeed);
+            Destroy(text);
+        }
     }
 
     public void Velocity(){
@@ -35,7 +40,7 @@ public class HUDSpeed : Photon.MonoBehaviour
     }
 
     public void FixedUpdate() {
-        if(this.photonView.isMine == true){
+        if(this.photonView.isMine){
             Velocity();
             ponteiroFunc();
         }
