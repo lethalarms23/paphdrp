@@ -9,7 +9,6 @@ using UnityEngine;
 public class CarController : Photon.MonoBehaviour
 {
 
-
     public void GetInput()
     {
         if(this.photonView.isMine == true){

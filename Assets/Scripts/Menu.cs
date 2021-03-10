@@ -22,6 +22,13 @@ public class Menu : MonoBehaviour
         secondMenu.SetActive(false);
     }
 
+    public void Start(){
+        if(PhotonNetwork.isMasterClient == false){
+            PistaMenu.SetActive(false);
+            CarroMenu.SetActive(true);
+        }
+    }
+
     public void FixedUpdate() {
         if(Input.GetKey(KeyCode.Escape)){
             secondMenu.SetActive(true);
