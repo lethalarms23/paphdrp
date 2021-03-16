@@ -4,14 +4,21 @@ using UnityEngine;
 
 public class TimeTrial : MonoBehaviour
 {
+    public GameObject[] checkpoints;
+    public GameObject timerStart;
+    public GameObject timerStop;
     Renderer rend;
     public bool isTimer = false;
     public float m;
     public float s;
     public float h;
+    public float savetime = 0f;
+    public float savetimetemp = 0f;
+    public string sametimestring = "";
+    public string timestring;
 
     private void Start()
-    {
+    { 
         rend = GetComponent<Renderer>();
     }
 
@@ -20,6 +27,34 @@ public class TimeTrial : MonoBehaviour
             Timer();
         }
     }
+
+    public void SetTimer(bool TF){
+        if(m != 0 || s != 0 || h != 0){
+            m = 0;
+            s = 0;
+            h = 0;
+        }
+        isTimer = TF;
+    }
+
+    public void SaveTime(){
+        if(savetime != 0){
+            timestring = m.ToString() + s.ToString();
+            if(savetimetemp < savetime){
+                savetime = savetimetemp;
+                timestring = m.ToString()+"m "+s.ToString("00.00")+"s";
+            }
+            else{
+
+            }
+        }
+        else{
+            timestring = m.ToString()+"m "+s.ToString("00.00")+"s";
+            savetime = float.Parse(timestring);
+        }
+        Debug.Log(timestring);
+    }
+
 
     public void Timer(){
         if(s < 59){
@@ -33,15 +68,6 @@ public class TimeTrial : MonoBehaviour
             s = 0; 
             m = 0;
             h += 1;
-        }
-    }
-
-    private void OnTriggerEnter(Collider other) {
-        if(isTimer == false && s == 0){
-            isTimer = true;
-        }
-        else if(isTimer == true && s > 5){
-            isTimer = false;
         }
     }
 }
