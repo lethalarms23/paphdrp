@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class TimeTrial : MonoBehaviour
 {
@@ -9,13 +10,8 @@ public class TimeTrial : MonoBehaviour
     public GameObject timerStop;
     Renderer rend;
     public bool isTimer = false;
-    public float m;
-    public float s;
-    public float h;
     public float savetime = 0f;
-    public float savetimetemp = 0f;
-    public string sametimestring = "";
-    public string timestring;
+    public float timer;
 
     private void Start()
     { 
@@ -26,48 +22,31 @@ public class TimeTrial : MonoBehaviour
         if(isTimer == true){
             Timer();
         }
+        else{
+            SaveTime();
+        }
     }
 
     public void SetTimer(bool TF){
-        if(m != 0 || s != 0 || h != 0){
-            m = 0;
-            s = 0;
-            h = 0;
-        }
-        isTimer = TF;
+        this.isTimer = TF;
     }
 
     public void SaveTime(){
-        if(savetime != 0){
-            timestring = m.ToString() + s.ToString();
-            if(savetimetemp < savetime){
-                savetime = savetimetemp;
-                timestring = m.ToString()+"m "+s.ToString("00.00")+"s";
+        if(timer > 1){
+            if(timer < savetime || savetime == 0f){
+                savetime = timer;
+                timer = 0f;
             }
             else{
-
+                timer = 0f;
             }
         }
         else{
-            timestring = m.ToString()+"m "+s.ToString("00.00")+"s";
-            savetime = float.Parse(timestring);
+            timer = 0f;
         }
-        Debug.Log(timestring);
     }
 
-
     public void Timer(){
-        if(s < 59){
-            s += 1 * Time.deltaTime;
-        }
-        else if(s > 59 && m < 59){
-            s = 0;
-            m += 1;
-        }
-        else{
-            s = 0; 
-            m = 0;
-            h += 1;
-        }
+        timer += Time.deltaTime;
     }
 }

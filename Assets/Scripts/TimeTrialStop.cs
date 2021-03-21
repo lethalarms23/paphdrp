@@ -9,7 +9,6 @@ public class TimeTrialStop : MonoBehaviour
     public GameObject TimeStart;
 
     private void OnTriggerEnter(Collider other) {
-        timer.GetComponent<TimeTrial>().SaveTime();
         timer.GetComponent<TimeTrial>().SetTimer(false);
         TimeStop.SetActive(false);
         TimeStart.SetActive(true);
