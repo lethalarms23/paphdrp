@@ -11,6 +11,8 @@ public class Menu : MonoBehaviour
     public GameObject SunCity;
     public GameObject Rx7Prefab;
     public GameObject TitanPrefab;
+    public GameObject EvoXPrefab;
+    public GameObject EvoX;
 
     public GameObject PistaMenu;
     public GameObject CarroMenu;
@@ -46,6 +48,12 @@ public class Menu : MonoBehaviour
         CarroMenu.SetActive(false);
         start.SetActive(true); 
     }  
+
+    public void EvoXSelect(){
+        PhotonNetwork.Instantiate(EvoXPrefab.name, new Vector3(EvoX.transform.position.x, EvoX.transform.position.y,EvoX.transform.position.z),Quaternion.identity,0);
+        CarroMenu.SetActive(false);
+        start.SetActive(true); 
+    }
     
     public void driftPlaygroundSelect(){
         driftPlayground.SetActive(true);
@@ -61,23 +69,5 @@ public class Menu : MonoBehaviour
 
     public void BugHunter(){
         Debug.Log("Pressed");
-    }
-
-    public void Play(){
-        PhotonNetwork.offlineMode = true;
-        PhotonNetwork.CreateRoom("single-player");
-        SceneManager.LoadScene("Game");
-    }
-
-    public void Multiplayer(){
-        SceneManager.LoadScene("OnlineMenu");
-    }
-
-    public void Options(){
-
-    }
-
-    public void Exit(){
-        Application.Quit();
     }
 }
