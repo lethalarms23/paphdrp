@@ -5,6 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoad : MonoBehaviour
 {
+    public GameObject MainMenu;
+    public GameObject OptionsMenu;
+    public void Start(){
+        MainMenu.SetActive(true);
+        OptionsMenu.SetActive(false);
+        SetQuality(2);
+    }
+
     public void Play(){
         PhotonNetwork.offlineMode = true;
         PhotonNetwork.CreateRoom("single-player");
@@ -16,10 +24,20 @@ public class SceneLoad : MonoBehaviour
     }
 
     public void Options(){
+        MainMenu.SetActive(false);
+        OptionsMenu.SetActive(true);
+    }
 
+    public void OptionsBack(){
+        MainMenu.SetActive(true);
+        OptionsMenu.SetActive(false);
     }
 
     public void Exit(){
         Application.Quit();
+    }
+
+    public void SetQuality(int qualityIndex){
+        QualitySettings.SetQualityLevel(qualityIndex);
     }
 }

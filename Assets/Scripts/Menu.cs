@@ -19,6 +19,7 @@ public class Menu : MonoBehaviour
     public GameObject start;
     public GameObject mainMenu;
     public GameObject secondMenu;
+    public GameObject optionsMenu;
 
     public void PlayV2(){
         secondMenu.SetActive(false);
@@ -34,6 +35,8 @@ public class Menu : MonoBehaviour
     public void FixedUpdate() {
         if(Input.GetKey(KeyCode.Escape)){
             secondMenu.SetActive(true);
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
     }
 
@@ -69,5 +72,20 @@ public class Menu : MonoBehaviour
 
     public void BugHunter(){
         Debug.Log("Pressed");
+    }
+
+    public void exitLobby(){
+        SceneManager.LoadScene("MainMenu");
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = true;
+    }
+
+    public void OptionsBack(){
+        secondMenu.SetActive(true);
+        optionsMenu.SetActive(false);
+    }
+
+    public void SetQuality(int qualityIndex){
+        QualitySettings.SetQualityLevel(qualityIndex);
     }
 }
