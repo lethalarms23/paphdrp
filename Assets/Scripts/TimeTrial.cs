@@ -14,6 +14,7 @@ public class TimeTrial : MonoBehaviour
     public float timer;
     public int milisec;
     public string saveTimeString;
+    public string tempString;
 
     private void Start()
     { 
@@ -39,7 +40,7 @@ public class TimeTrial : MonoBehaviour
                 savetime = timer;
                 milisec = (int)(timer * 1000);
                 milisec = milisec % 1000;
-                saveTimeString = (TimeSpan.FromSeconds(timer).Hours) + "h:"+(TimeSpan.FromSeconds(timer).Minutes)+"m:"+(TimeSpan.FromSeconds(timer).Seconds)+"s:"+milisec+"ms";
+                saveTimeString =(TimeSpan.FromSeconds(timer).Minutes)+"m:"+(TimeSpan.FromSeconds(timer).Seconds)+"s:"+milisec+"ms";
                 timer = 0f;
             }
             else{
@@ -53,5 +54,8 @@ public class TimeTrial : MonoBehaviour
 
     public void Timer(){
         timer += Time.deltaTime;
+        milisec = (int)(timer * 1000);
+        milisec = milisec % 1000;
+        tempString = (TimeSpan.FromSeconds(timer).Minutes)+"m:"+(TimeSpan.FromSeconds(timer).Seconds)+"s:"+milisec+"ms";
     }
 }

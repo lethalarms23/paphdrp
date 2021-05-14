@@ -13,6 +13,7 @@ public class Menu : MonoBehaviour
     public GameObject TitanPrefab;
     public GameObject EvoXPrefab;
     public GameObject EvoX;
+    public string map;
 
     public GameObject PistaMenu;
     public GameObject CarroMenu;
@@ -29,15 +30,21 @@ public class Menu : MonoBehaviour
         if(PhotonNetwork.isMasterClient == false){
             PistaMenu.SetActive(false);
             CarroMenu.SetActive(true);
+            if(map == "SunCity"){
+                SunCity.SetActive(true);
+            }
+            else if(map == "driftPlayground"){
+                driftPlayground.SetActive(true);
+            }
         }
     }
 
     public void FixedUpdate() {
-        if(Input.GetKey(KeyCode.Escape)){
-            secondMenu.SetActive(true);
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
+        // if(Input.GetKey(KeyCode.Escape)){
+        //     secondMenu.SetActive(true);
+        //     Cursor.lockState = CursorLockMode.Locked;
+        //     Cursor.visible = false;
+        // }
     }
 
     public void TitanSelect(){
@@ -62,12 +69,14 @@ public class Menu : MonoBehaviour
         driftPlayground.SetActive(true);
         PistaMenu.SetActive(false);
         CarroMenu.SetActive(true);
+        map = "driftPlayground";
     }
 
     public void SunCitySelect(){
         SunCity.SetActive(true);
         PistaMenu.SetActive(false);
         CarroMenu.SetActive(true);
+        map = "SunCity";
     }
 
     public void BugHunter(){
