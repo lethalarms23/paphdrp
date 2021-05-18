@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class DriftPoints : Photon.MonoBehaviour
 {
+    public AudioSource driftAudio;
     public WheelCollider rearDriverW;
     public float driftPoints;
     public int combo = 0;
@@ -18,6 +19,7 @@ public class DriftPoints : Photon.MonoBehaviour
 
     public PhotonView photonView;
     public GameObject particles;
+    public ParticleSystem particleSystem;
 
     public GameObject timeT;
     public TimeTrial timetrial;
@@ -26,7 +28,8 @@ public class DriftPoints : Photon.MonoBehaviour
     public Text timertxt;
 
     public void Start() {
-        timeT = GameObject.Find("/Jogo/Pistas/driftplayground/TimeTrial");
+        timeT = GameObject.Find("/driftplayground(Clone)/TimeTrial");
+        particleSystem = particles.GetComponent<ParticleSystem>(); 
         drift = text.GetComponent<Text>();
         combotxt = comboText.GetComponent<Text>();
         timertxt = timerText.GetComponent<Text>();
@@ -41,15 +44,16 @@ public class DriftPoints : Photon.MonoBehaviour
 
     public void driftPart(){
          if(this.photonView.isMine){
+            var particleEmission = particleSystem.emission;
             WheelHit wheelHit;
             float blind = 0.15f;
             rearDriverW.GetGroundHit(out wheelHit);
             if(wheelHit.sidewaysSlip > blind || wheelHit.sidewaysSlip < -blind){
 			    driftPoints += blind * combo * 1000 * Time.deltaTime;   
-                particles.SetActive(true);
+                particleEmission.enabled = true;
 		    }
             else{ 
-                particles.SetActive(false);
+                particleEmission.enabled = false;
             }
             drift.text = driftPoints.ToString("#");
         }
@@ -78,12 +82,34 @@ public class DriftPoints : Photon.MonoBehaviour
         }
     }
 
+    public void driftSound(){
+        if(this.photonView.isMine){
+            var particleEmission = particleSystem.emission;
+            WheelHit wheelHit;
+            float blind = 0.80f;
+            rearDriverW.GetGroundHit(out wheelHit);
+            if(wheelHit.sidewaysSlip > blind || wheelHit.sidewaysSlip < -blind){
+                if(!driftAudio.isPlaying){
+                    driftAudio.Play();
+                }
+		    }
+            else{ 
+                driftAudio.Stop();
+            }
+        }
+        else{
+            return;
+        }
+    }
+
     public void FixedUpdate() {
         driftPart();
         Combo();
-        if(timetrial.isTimer == true){
-            timertxt.text = timetrial.tempString;
+        driftSound();
+        if(timeT != null){
+            if(timetrial.isTimer == true){
+                timertxt.text = timetrial.tempString;
+            }
         }
-    }
-    
+    }  
 }

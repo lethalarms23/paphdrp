@@ -23,7 +23,6 @@ public class MultiplayerMenu : MonoBehaviour
 
     private void OnConnectedToMaster(){
         PhotonNetwork.JoinLobby(TypedLobby.Default);
-        Debug.Log("Connected");
     }
 
     public void ChangeUserNameInput(){

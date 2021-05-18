@@ -55,18 +55,27 @@ public class CarController : Photon.MonoBehaviour
 
     private void Brakes(){
         if(m_verticalInput < 0 && gear == "D"){
+            if(!carBrakes.isPlaying){
+                carBrakes.Play();
+            }
             frontDriverW.brakeTorque = brakeForce * 20;
             frontPassengerW.brakeTorque = brakeForce * 20;
             rearDriverW.brakeTorque = brakeForce * 10;
             rearPassengerW.brakeTorque = brakeForce * 10;
         }
         else if(m_verticalInput > 0 && gear == "R"){
+            if(!carBrakes.isPlaying){
+                carBrakes.Play();
+            }
             frontDriverW.brakeTorque = brakeForce * 20;
             frontPassengerW.brakeTorque = brakeForce * 20;
             rearDriverW.brakeTorque = brakeForce * 10;
             rearPassengerW.brakeTorque = brakeForce * 10;
         }
         else{
+            if(carBrakes.isPlaying){
+                carBrakes.Stop();
+            }
             frontDriverW.brakeTorque = 0;
             frontPassengerW.brakeTorque = 0;
             rearDriverW.brakeTorque = 0;
@@ -102,6 +111,37 @@ public class CarController : Photon.MonoBehaviour
         }
 
 	}
+
+    private void RevLimiter(){
+        if(rearDriverW.rpm > 910 || rearDriverW.rpm < -910){
+            if(!revLimiter.isPlaying){
+                revLimiter.Play();
+            }
+        }
+        else{
+            revLimiter.Stop();
+        }
+    }
+
+    private void Idle(){
+        if(speed == "0"){
+            if(carAceleration.isPlaying){
+                carAceleration.Stop();
+            }
+            if(!carIdle.isPlaying){
+                carIdle.Play();
+            }
+        }
+        else{
+            carIdle.Stop();
+            if(!carAceleration.isPlaying){
+                carAceleration.pitch = pitch;
+                carAceleration.Play();
+            }
+            carAceleration.pitch = Math.Abs(rearDriverW.rpm)/1700;
+            pitch = carAceleration.pitch;
+        }
+    }
 
     private void ChangeGear(){
         if(gear == "N"){
@@ -150,6 +190,8 @@ public class CarController : Photon.MonoBehaviour
         Velocity();
         UpdateWheelPoses();
         ChangeGear();
+        Idle();
+        RevLimiter();
     }
 
 
@@ -173,4 +215,9 @@ public class CarController : Photon.MonoBehaviour
     public float carVelocity;
     public Rigidbody rigidCar;
     public PhotonView photonView;
+    public AudioSource carAceleration;
+    public AudioSource carBrakes;
+    public AudioSource carIdle;
+    public AudioSource revLimiter;
+    public float pitch=0.5f;
 }

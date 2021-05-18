@@ -7,13 +7,12 @@ public class Menu : MonoBehaviour
 {
     public GameObject titan;
     public GameObject Rx7;
-    public GameObject driftPlayground;
-    public GameObject SunCity;
     public GameObject Rx7Prefab;
     public GameObject TitanPrefab;
     public GameObject EvoXPrefab;
     public GameObject EvoX;
-    public string map;
+    public GameObject driftPlaygroundPrefab;
+    public GameObject sunCityPrefab;
 
     public GameObject PistaMenu;
     public GameObject CarroMenu;
@@ -30,12 +29,6 @@ public class Menu : MonoBehaviour
         if(PhotonNetwork.isMasterClient == false){
             PistaMenu.SetActive(false);
             CarroMenu.SetActive(true);
-            if(map == "SunCity"){
-                SunCity.SetActive(true);
-            }
-            else if(map == "driftPlayground"){
-                driftPlayground.SetActive(true);
-            }
         }
     }
 
@@ -66,17 +59,15 @@ public class Menu : MonoBehaviour
     }
     
     public void driftPlaygroundSelect(){
-        driftPlayground.SetActive(true);
+        PhotonNetwork.Instantiate(driftPlaygroundPrefab.name, new Vector3(-921.9f, -97.9f,71.57524f),Quaternion.identity,0);
         PistaMenu.SetActive(false);
         CarroMenu.SetActive(true);
-        map = "driftPlayground";
     }
 
     public void SunCitySelect(){
-        SunCity.SetActive(true);
+        PhotonNetwork.Instantiate(sunCityPrefab.name, new Vector3(-972.9f, -38f,48.31f),Quaternion.identity,0);
         PistaMenu.SetActive(false);
         CarroMenu.SetActive(true);
-        map = "SunCity";
     }
 
     public void BugHunter(){
