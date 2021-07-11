@@ -24,7 +24,7 @@ public class GearSelect : Photon.MonoBehaviour
             gearText.text = gear;
         }
         else{
-            return;
+            Destroy(photonView);
         }
     }
 }

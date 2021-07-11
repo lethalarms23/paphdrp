@@ -5,11 +5,12 @@ using UnityEngine.UI;
 
 public class DriftPoints : Photon.MonoBehaviour
 {
-    public AudioSource driftAudio;
+    public AudioClip driftAudio;
     public WheelCollider rearDriverW;
     public float driftPoints;
     public int combo = 0;
     public string BugSolve = null; 
+    public float blind = 0.15f;
 
     public GameObject text;
     public Text drift;
@@ -18,8 +19,6 @@ public class DriftPoints : Photon.MonoBehaviour
     public Text combotxt;
 
     public PhotonView photonView;
-    public GameObject particles;
-    public ParticleSystem particleSystem;
 
     public GameObject timeT;
     public TimeTrial timetrial;
@@ -29,7 +28,6 @@ public class DriftPoints : Photon.MonoBehaviour
 
     public void Start() {
         timeT = GameObject.Find("/driftplayground(Clone)/TimeTrial");
-        particleSystem = particles.GetComponent<ParticleSystem>(); 
         drift = text.GetComponent<Text>();
         combotxt = comboText.GetComponent<Text>();
         timertxt = timerText.GetComponent<Text>();
@@ -44,16 +42,13 @@ public class DriftPoints : Photon.MonoBehaviour
 
     public void driftPart(){
          if(this.photonView.isMine){
-            var particleEmission = particleSystem.emission;
             WheelHit wheelHit;
             float blind = 0.15f;
             rearDriverW.GetGroundHit(out wheelHit);
             if(wheelHit.sidewaysSlip > blind || wheelHit.sidewaysSlip < -blind){
 			    driftPoints += blind * combo * 1000 * Time.deltaTime;   
-                particleEmission.enabled = true;
 		    }
             else{ 
-                particleEmission.enabled = false;
             }
             drift.text = driftPoints.ToString("#");
         }
@@ -65,7 +60,6 @@ public class DriftPoints : Photon.MonoBehaviour
     public void Combo(){
         if(this.photonView.isMine){
             WheelHit wheelHit;
-            float blind = 0.15f;
             rearDriverW.GetGroundHit(out wheelHit);
             if(wheelHit.sidewaysSlip > blind && BugSolve != "false"){
                 BugSolve = "false";
@@ -75,26 +69,11 @@ public class DriftPoints : Photon.MonoBehaviour
                 BugSolve = "true";
                 combo = combo + 1;
             }
-            combotxt.text = "Combo " + combo.ToString() + "x";
-        }
-        else{
-            return;
-        }
-    }
-
-    public void driftSound(){
-        if(this.photonView.isMine){
-            var particleEmission = particleSystem.emission;
-            WheelHit wheelHit;
-            float blind = 0.80f;
-            rearDriverW.GetGroundHit(out wheelHit);
-            if(wheelHit.sidewaysSlip > blind || wheelHit.sidewaysSlip < -blind){
-                if(!driftAudio.isPlaying){
-                    driftAudio.Play();
-                }
-		    }
-            else{ 
-                driftAudio.Stop();
+            if(combo == 0){
+                combotxt.text = "";
+            }
+            else{
+                combotxt.text = "Combo " + combo.ToString() + "x";
             }
         }
         else{
@@ -105,7 +84,6 @@ public class DriftPoints : Photon.MonoBehaviour
     public void FixedUpdate() {
         driftPart();
         Combo();
-        driftSound();
         if(timeT != null){
             if(timetrial.isTimer == true){
                 timertxt.text = timetrial.tempString;

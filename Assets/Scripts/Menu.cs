@@ -9,8 +9,8 @@ public class Menu : MonoBehaviour
     public GameObject Rx7;
     public GameObject Rx7Prefab;
     public GameObject TitanPrefab;
-    public GameObject EvoXPrefab;
-    public GameObject EvoX;
+    public GameObject AudiA3Prefab;
+    public GameObject AudiA3;
     public GameObject driftPlaygroundPrefab;
     public GameObject sunCityPrefab;
 
@@ -52,8 +52,8 @@ public class Menu : MonoBehaviour
         start.SetActive(true); 
     }  
 
-    public void EvoXSelect(){
-        PhotonNetwork.Instantiate(EvoXPrefab.name, new Vector3(EvoX.transform.position.x, EvoX.transform.position.y,EvoX.transform.position.z),Quaternion.identity,0);
+    public void AudiA3Select(){
+        PhotonNetwork.Instantiate(AudiA3Prefab.name, new Vector3(AudiA3.transform.position.x, AudiA3.transform.position.y,AudiA3.transform.position.z),Quaternion.identity,0);
         CarroMenu.SetActive(false);
         start.SetActive(true); 
     }

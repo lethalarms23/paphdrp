@@ -10,6 +10,8 @@ public class Camera1stPerson : MonoBehaviour
     public float mouseSensivity = 1;
     public Transform Camera;
     public Transform carro;
+    public bool MoveWithCar;
+    private float x,y,z;
 
     //So é usada no inicio do jogo e serve para esconder o rato
     private void Start()
@@ -29,9 +31,15 @@ public class Camera1stPerson : MonoBehaviour
 
     //Atribui as variaveis a respetiva input do rato e aplica a rotação a camera usando um vetor.
     private void Move(){
-        float x = -carro.eulerAngles.x + m_yInput;
-        float y = 180 + carro.eulerAngles.y + m_xInput;
-        float z = carro.eulerAngles.z;
+        if(MoveWithCar){
+            x = -carro.eulerAngles.x + m_yInput;
+            y = 180 + carro.eulerAngles.y + m_xInput;
+        }
+        else{
+            x = m_yInput;
+            y = 180 + m_xInput;
+        }
+        
         Vector3 move = new Vector3(x,y,z);
     	Camera.eulerAngles = move;
     }
